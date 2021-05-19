@@ -1,11 +1,15 @@
 const express = require("express");
 const router = express.Router();
-const User = require("../../models/User");
 const gravatar = require("gravatar");
 const bcrypt = require("bcryptjs");
 const passport = require("passport");
 const jwt = require("jsonwebtoken");
 const keys = require("../../config/keys");
+
+const validateRegisterInput = require("../../validation/register");
+const validateLoginInput = require("../../validation/login");
+
+const User = require("../../models/User");
 
 // @route GET api/users/test
 // @desc Tests users route
@@ -16,6 +20,12 @@ router.get("/test", (req, res) => res.json({ msg: "routes /users works!" }));
 // @desc Register user
 // @access Public
 router.post("/register", (req, res) => {
+  const { errors, isValid } = validateRegisterInput(req.body);
+
+  if (!isValid) {
+    return res.status(400).json(errors);
+  }
+
   User.findOne({ email: req.body.email }).then((user) => {
     if (user) {
       return res.status(400).json({ email: "Email already exists" });
@@ -49,6 +59,12 @@ router.post("/register", (req, res) => {
 // @desc Login user / Returning JWT Token
 // @access Public
 router.post("/login", (req, res) => {
+  const { errors, isValid } = validateLoginInput(req.body);
+
+  if (!isValid) {
+    return res.status(400).json(errors);
+  }
+
   const email = req.body.email;
   const password = req.body.password;
 
@@ -56,7 +72,8 @@ router.post("/login", (req, res) => {
   User.findOne({ email }).then((user) => {
     // check for user
     if (!user) {
-      return res.status(404).json({ email: "User not found" });
+      errors.email = "User not found!";
+      return res.status(404).json(errors);
     }
     //check password
     bcrypt.compare(password, user.password).then((isMatch) => {
@@ -78,7 +95,8 @@ router.post("/login", (req, res) => {
           }
         );
       } else {
-        return res.status(400).json({ password: "Password incorrect" });
+        errors.password = "Password incorrect!";
+        return res.status(400).json(errors);
       }
     });
   });
@@ -91,7 +109,11 @@ router.get(
   "/current",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
-    res.json({ msg: "Success" });
+    res.json({
+      id: req.user.id,
+      name: req.user.name,
+      email: req.user.email,
+    });
   }
 );
 
