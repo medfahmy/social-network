@@ -4,7 +4,6 @@ const mongoose = require("mongoose");
 const passport = require("passport");
 
 const Profile = require("../../models/Profile");
-const { validate } = require("../../models/User");
 const User = require("../../models/User");
 const validateProfileInput = require("../../validation/profile");
 
@@ -139,6 +138,20 @@ router.post(
             .then((profile) => res.json(profile));
         });
       }
+    });
+  }
+);
+// @route DELETE api/profile
+// @desc delete user profile
+// @access private
+router.delete(
+  "/",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    Profile.findOneAndRemove({ user: req.user.id }).then(() => {
+      User.findOneAndRemove({ _id: req.user.id }).then(() =>
+        res.json({ success: true })
+      );
     });
   }
 );
