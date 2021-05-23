@@ -12,8 +12,8 @@ const validateLoginInput = require("../../validation/login");
 const User = require("../../models/User");
 
 // @route POST api/user/register
-// @desc Register user
-// @access Public
+// @desc register user
+// @access public
 router.post("/register", (req, res) => {
   const { errors, isValid } = validateRegisterInput(req.body);
 
@@ -50,9 +50,9 @@ router.post("/register", (req, res) => {
     }
   });
 });
-// @route GET api/users/login
-// @desc Login user / Returning JWT Token
-// @access Public
+// @route GET api/user/login
+// @desc login user / Returning JWT Token
+// @access public
 router.post("/login", (req, res) => {
   const { errors, isValid } = validateLoginInput(req.body);
 
@@ -97,9 +97,9 @@ router.post("/login", (req, res) => {
   });
 });
 
-// @route GET api/users/current
-// @desc Return cureent user
-// @access Private
+// @route GET api/user/current
+// @desc return current user
+// @access private
 router.get(
   "/current",
   passport.authenticate("jwt", { session: false }),
@@ -109,6 +109,28 @@ router.get(
       name: req.user.name,
       email: req.user.email,
     });
+  }
+);
+
+// @route GET api/user/all
+// @desc get all users
+// @access Private
+router.get(
+  "/all",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    const errors = {};
+    User.find()
+      .populate("user", ["email", "password"])
+      .then((users) => {
+        if (!users) {
+          errors.user = "There are no users!";
+          return res.status(404).json(errors);
+        }
+        res.json(users);
+      })
+
+      .catch((err) => res.status(400).json(err));
   }
 );
 
