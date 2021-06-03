@@ -1,2 +1,2 @@
-# social-network-mern
+# social-network
 social network built with the mern stack
