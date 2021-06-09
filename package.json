@@ -6,7 +6,6 @@
     "dev": "concurrently \"npm run b\" \"npm run f\" "
   },
   "dependencies": {
-    "concurrently": "^6.2.0",
-    "prop-types": "^15.7.2"
+    "concurrently": "^6.2.0"
   }
 }
