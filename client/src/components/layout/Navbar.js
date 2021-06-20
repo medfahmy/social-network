@@ -18,6 +18,9 @@ class Navbar extends Component {
     const authLinks = (
       <ul>
         <li>
+          <Link to="/dashboard">dashboard</Link>
+        </li>
+        <li>
           <a href="a" onClick={this.onLogoutClick.bind(this)}>
             Log out
           </a>

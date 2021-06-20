@@ -6,14 +6,13 @@ import {
 
 const initialState = {
   profile: null,
-  profiles: [],
+  profiles: null,
   loading: false,
 };
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default function (state = initialState, action) {
-  const { type, payload } = action;
-  switch (type) {
+  switch (action.type) {
     case PROFILE_LOADING:
       return {
         ...state,
@@ -22,8 +21,13 @@ export default function (state = initialState, action) {
     case GET_PROFILE:
       return {
         ...state,
-        profile: payload,
+        profile: action.payload,
         loading: false,
+      };
+    case CLEAR_CURRENT_PROFILE:
+      return {
+        ...state,
+        profile: null,
       };
     default:
       return state;

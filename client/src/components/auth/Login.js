@@ -58,6 +58,7 @@ class Login extends Component {
             <div className="col">
               <h1>Login</h1>
               <p>Sign in to your account</p>
+              <pre>{JSON.stringify(errors, null, 2)}</pre>
               <form onSubmit={this.onSubmit}>
                 <input
                   type="email"

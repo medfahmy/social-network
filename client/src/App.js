@@ -1,10 +1,12 @@
 import React, { Component } from "react";
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { Provider } from "react-redux";
 import store from "./store";
 import jwt_decode from "jwt-decode";
 import setAuthToken from "./utils/setAuthToken";
 import { logoutUser, setCurrentUser } from "./actions/authActions";
+
+import PrivateRoute from "./components/common/PrivateRoute";
 
 import Footer from "./components/layout/Footer";
 import Landing from "./components/layout/Landing";
@@ -12,6 +14,8 @@ import Navbar from "./components/layout/Navbar";
 import Login from "./components/auth/Login";
 import Register from "./components/auth/Register";
 import Dashboard from "./components/dashboard/Dashboard";
+import ProfileForm from "./components/profile/ProfileForm";
+// import EditProfile from "./components/profile/EditProfile";
 
 import "./App.css";
 import { clearCurrentProfile } from "./actions/profileActions";
@@ -49,7 +53,23 @@ class App extends Component {
             <div className="container">
               <Route exact path="/register" component={Register} />
               <Route exact path="/login" component={Login} />
-              <Route exact path="/dashboard" component={Dashboard} />
+              <Switch>
+                <PrivateRoute exact path="/dashboard" component={Dashboard} />
+              </Switch>
+              <Switch>
+                <PrivateRoute
+                  exact
+                  path="/create-profile"
+                  component={ProfileForm}
+                />
+              </Switch>
+              <Switch>
+                <PrivateRoute
+                  exact
+                  path="/edit-profile"
+                  component={ProfileForm}
+                />
+              </Switch>
             </div>
             <Footer />
           </div>
