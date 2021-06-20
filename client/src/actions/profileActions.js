@@ -6,6 +6,7 @@ import {
   PROFILE_LOADING,
   GET_ERRORS,
   SET_CURRENT_USER,
+  GET_PROFILES,
 } from "./types";
 
 export const getCurrentProfile = () => (dispatch) => {
@@ -22,6 +23,42 @@ export const getCurrentProfile = () => (dispatch) => {
       dispatch({
         type: GET_PROFILE,
         payload: {},
+      });
+    });
+};
+
+export const getProfileByHandle = (handle) => (dispatch) => {
+  dispatch(setProfileLoading());
+  axios
+    .get(`/api/profile/${handle}`)
+    .then((res) => {
+      dispatch({
+        type: GET_PROFILE,
+        payload: res.data,
+      });
+    })
+    .catch((err) => {
+      dispatch({
+        type: GET_PROFILE,
+        payload: null,
+      });
+    });
+};
+
+export const getProfiles = () => (dispatch) => {
+  dispatch(setProfileLoading());
+  axios
+    .get("/api/profile/all")
+    .then((res) => {
+      dispatch({
+        type: GET_PROFILES,
+        payload: res.data,
+      });
+    })
+    .catch((err) => {
+      dispatch({
+        type: GET_PROFILES,
+        payload: null,
       });
     });
 };
