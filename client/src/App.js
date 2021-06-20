@@ -17,6 +17,7 @@ import Dashboard from "./components/dashboard/Dashboard";
 import ProfileForm from "./components/profile/ProfileForm";
 import Profiles from "./profiles/Profiles";
 import Profile from "./components/profile/Profile";
+import Posts from "./components/post/Posts";
 
 import "./App.css";
 import { clearCurrentProfile } from "./actions/profileActions";
@@ -72,6 +73,9 @@ class App extends Component {
                   path="/edit-profile"
                   component={ProfileForm}
                 />
+              </Switch>
+              <Switch>
+                <PrivateRoute exact path="/feed" component={Posts} />
               </Switch>
             </div>
             <Footer />

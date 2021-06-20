@@ -23,6 +23,9 @@ const Navbar = ({ clearCurrentProfile, logoutUser, auth }) => {
         <Link to="/dashboard">dashboard</Link>
       </li>
       <li>
+        <Link to="/feed">post feed</Link>
+      </li>
+      <li>
         <a href="a" onClick={handleLogout}>
           Log out
         </a>
